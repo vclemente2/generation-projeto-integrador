@@ -11,6 +11,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.br.CNPJ;
+import org.hibernate.validator.constraints.br.CPF;
 
 @Entity
 @Table(name = "tb_users")
@@ -22,10 +24,12 @@ public class User {
 	
 	@Column(unique = true)
 	@Size(min = 11, max = 11, message = "O CPF deve conter 11 caracteres")
+	@CPF
 	private String cpf;
 	
 	@Column(unique = true)
 	@Size(min = 14, max = 14, message = "O CNPJ deve conter 14 caracteres")
+	@CNPJ
 	private String cnpj;
 	
 	@NotBlank(message = "O CEP é um campo obrigatório")
