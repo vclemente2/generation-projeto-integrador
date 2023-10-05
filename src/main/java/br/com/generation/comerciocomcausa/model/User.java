@@ -2,21 +2,18 @@ package br.com.generation.comerciocomcausa.model;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import jakarta.persistence.Id;
 
 @Entity
-@Table(name = "tb_user")
+@Table(name = "tb_users")
 public class User {
 	
 	@Id
@@ -68,6 +65,10 @@ public class User {
 
 	@UpdateTimestamp
 	private LocalDateTime created_at;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+	@JsonIgnoreProperties("user")
+	private List<Product> products;
 
 	public Long getId() {
 		return Id;
@@ -181,4 +182,11 @@ public class User {
 		this.created_at = created_at;
 	}
 
+	public List<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
 }
