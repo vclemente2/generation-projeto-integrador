@@ -9,6 +9,9 @@ import br.com.generation.comerciocomcausa.model.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 	
-	public List<Category> findAllByNameContainingIgnoreCase(@Param("name") String name);
-	
+	List<Category> findAllByNameContainingIgnoreCase(@Param("name") String name);
+
+	List<Category> findAllByDescriptionContainingIgnoreCase(@Param("description") String description);
+
+	List<Category> findAllByNameContainingAndDescriptionContainingIgnoreCase(@Param("name") String name, @Param("description") String description);
 }
