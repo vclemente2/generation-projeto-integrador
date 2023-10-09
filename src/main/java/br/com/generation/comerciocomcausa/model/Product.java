@@ -25,6 +25,7 @@ public class Product {
     private String description;
 
     @NotNull(message = "O preço é um campo obrigatório")
+    @Column(precision = 10, scale = 2)
     private BigDecimal price;
 
     @Size(max = 255, message = "O campo imagem deve conter no máximo 255 caracteres")
