@@ -20,7 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	
 	List<User> findAllByNameContainingAndCnpjContainingIgnoreCase(@Param("name") String name, @Param("cnpj") String cnpj);
 
-	Optional<User> findByUser(String userName);
+	Optional<User> findByEmail(String email);
 
-	
 }

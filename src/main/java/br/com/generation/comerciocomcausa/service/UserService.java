@@ -30,7 +30,7 @@ public class UserService {
 
     public Optional<User> registerUser(User user) {
 
-        if (userRepository.findByUser(user.getEmail()).isPresent())
+        if (userRepository.findByEmail(user.getEmail()).isPresent())
             return Optional.empty();
 
         user.setPassword(criptografarSenha(user.getPassword()));
@@ -43,7 +43,7 @@ public class UserService {
 
         if(userRepository.findById(user.getId()).isPresent()) {
 
-            Optional<User> searchUser = userRepository.findByUser(user.getEmail());
+            Optional<User> searchUser = userRepository.findByEmail(user.getEmail());
 
             if ( (searchUser.isPresent()) && ( searchUser.get().getId() != user.getId()))
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe!", null);
@@ -70,7 +70,7 @@ public class UserService {
         if (authentication.isAuthenticated()) {
 
             // Busca os dados do usuário
-            Optional<User> user = userRepository.findByUser(userLogin.get().getEmail());
+            Optional<User> user = userRepository.findByEmail(userLogin.get().getEmail());
 
             // Se o usuário foi encontrado
             if (user.isPresent()) {
