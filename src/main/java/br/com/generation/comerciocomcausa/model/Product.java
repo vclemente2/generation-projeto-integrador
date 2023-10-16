@@ -33,10 +33,12 @@ public class Product {
 
     @ManyToOne
     @JsonIgnoreProperties("products")
+    @NotNull(message = "O usuário é um campo obrigatório")
     private User user;
 
     @ManyToOne
     @JsonIgnoreProperties("products")
+    @NotNull(message = "A categoria é um campo obrigatório")
     private Category category;
 
     public Long getId() {
