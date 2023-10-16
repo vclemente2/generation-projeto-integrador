@@ -3,6 +3,8 @@ package br.com.generation.comerciocomcausa.controller;
 import java.util.List;
 import java.util.Optional;
 
+import br.com.generation.comerciocomcausa.model.UserLogin;
+import br.com.generation.comerciocomcausa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,8 @@ import jakarta.validation.Valid;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 
+	@Autowired
+	private UserService userService;
 	@Autowired
 	private UserRepository userRepository;
 
@@ -69,26 +73,35 @@ public class UserController {
 		return ResponseEntity.ok(userRepository.findAllByNameContainingIgnoreCase(name));
 	}
 
-	@PostMapping
+	@PostMapping("/sign-up")
 	public ResponseEntity<User> post(@Valid @RequestBody User user) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(user));
+		return userService.registerUser(user)
+				.map((response)->ResponseEntity.ok(response))
+				.orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe!"));
+	}
+
+	@PostMapping("/login")
+	public ResponseEntity<UserLogin> login(@Valid @RequestBody Optional<UserLogin> userLogin){
+		return userService.autenticarUsuario(userLogin)
+				.map((response)-> ResponseEntity.status(HttpStatus.CREATED).body(response))
+				.orElseThrow(()->new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 	}
 
 	@PutMapping
 	public ResponseEntity<User> put(@Valid @RequestBody User user) {
-		return userRepository.findById(user.getId())
-				.map(resposta -> ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(user)))
-				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+		return userService.updateUser(user)
+				.map((response) -> ResponseEntity.ok(response))
+				.orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
 	}
 
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@DeleteMapping("/{id}")
-	public void delete(@PathVariable Long id) {
-		Optional<User> user = userRepository.findById(id);
-
-		if (user.isEmpty())
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-
-		userRepository.deleteById(id);
-	}
+//	@ResponseStatus(HttpStatus.NO_CONTENT)
+//	@DeleteMapping("/{id}")
+//	public void delete(@PathVariable Long id) {
+//		Optional<User> user = userRepository.findById(id);
+//
+//		if (user.isEmpty())
+//			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+//
+//		userRepository.deleteById(id);
+//	}
 }
