@@ -3,6 +3,7 @@ package br.com.generation.comerciocomcausa.repository;
 import br.com.generation.comerciocomcausa.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
@@ -18,4 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	List<User> findAllByNameContainingAndCpfContainingIgnoreCase(@Param("name") String name, @Param("cpf") String cpf);
 	
 	List<User> findAllByNameContainingAndCnpjContainingIgnoreCase(@Param("name") String name, @Param("cnpj") String cnpj);
+
+	Optional<User> findByEmail(String email);
+
 }
