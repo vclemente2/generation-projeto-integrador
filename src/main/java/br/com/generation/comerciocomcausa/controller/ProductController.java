@@ -2,6 +2,7 @@ package br.com.generation.comerciocomcausa.controller;
 
 import br.com.generation.comerciocomcausa.model.Product;
 
+import br.com.generation.comerciocomcausa.repository.CategoryRepository;
 import br.com.generation.comerciocomcausa.repository.ProductRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class ProductController {
 
     @Autowired
     private ProductRepository productRepository;
+    
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @GetMapping
     public ResponseEntity<List<Product>> getAll(
@@ -57,16 +61,25 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<Product> post(@Valid @RequestBody Product product) {
-        return  ResponseEntity.status(HttpStatus.CREATED)
+        if(categoryRepository.existsById(product.getCategory().getId()))
+        	return  ResponseEntity.status(HttpStatus.CREATED)
                 .body(productRepository.save(product));
+        
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Categoria não existe!", null);
     }
 
     @PutMapping
     public ResponseEntity<Product> put (@Valid @RequestBody Product product) {
-        return productRepository.findById(product.getId())
-                .map(resposta -> ResponseEntity.status(HttpStatus.CREATED)
-                        .body(productRepository.save(product)))
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        if(productRepository.existsById(product.getId())) {
+        	
+        	if(categoryRepository.existsById(product.getCategory().getId()))
+        		return ResponseEntity.status(HttpStatus.OK)
+        				.body(productRepository.save(product));
+        	
+        	throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Categoria não existe!", null);
+        }
+        
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @GetMapping("/name/{name}")
