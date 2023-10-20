@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -57,7 +58,8 @@ public class User {
 	@NotBlank(message = "O tipo é um campo obrigatório")
 	@Size(max = 50, message = "O campo tipo deve conter no máximo 50 caracteres")
 	private String type;
-	
+
+	@Schema(example = "email@email.com.br")
 	@Column(unique = true)
 	@NotBlank(message = "O e-mail é um campo obrigatório")
 	@Size(max = 100, message = "O campo e-mail deve conter no máximo 100 caracteres")
