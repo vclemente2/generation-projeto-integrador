@@ -1,6 +1,7 @@
 package br.com.generation.comerciocomcausa.controller;
 
 import br.com.generation.comerciocomcausa.model.Product;
+
 import br.com.generation.comerciocomcausa.repository.CategoryRepository;
 import br.com.generation.comerciocomcausa.repository.ProductRepository;
 import jakarta.validation.Valid;
