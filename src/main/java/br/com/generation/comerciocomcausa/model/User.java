@@ -23,12 +23,12 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long Id;
 	
-	@Column(unique = true)
+	
 	@Size(min = 11, max = 11, message = "O CPF deve conter 11 caracteres")
 	@CPF
 	private String cpf;
 	
-	@Column(unique = true)
+	
 	@Size(min = 14, max = 14, message = "O CNPJ deve conter 14 caracteres")
 	@CNPJ
 	private String cnpj;
